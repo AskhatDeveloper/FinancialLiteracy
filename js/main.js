@@ -354,3 +354,12 @@ confirmDeleteGoal?.addEventListener("click", () => {
   renderGoal();
   goalModal.classList.add("hidden");
 });
+
+const mobileBtn = document.querySelector(".mobile-menu-btn");
+const sideMenu = document.querySelector(".side-menu");
+
+if (mobileBtn) {
+  mobileBtn.addEventListener("click", () => {
+    sideMenu.classList.toggle("active");
+  });
+}

@@ -14,6 +14,8 @@
   <body>
     <div class="app">
       <aside class="sidebar">
+        <button class="mobile-menu-btn">☰</button>
+
         <h1 class="page-title">Dashboard</h1>
         <p class="page-subtitle">Обзор ваших финансов</p>
         <h2 class="logo">Financial Literacy</h2>
@@ -21,7 +23,7 @@
         <nav class="side-menu">
           <a href="#" class="active" data-link="dashboard">🏠 Dashboard</a>
           <a href="#" data-link="analytics">📊 Analytics</a>
-          <a href="#" data-link="history" id="historyBtn">📜 History</a>
+          <a href="#" data-link="history">📜 History</a>
           <a href="#" data-link="profile">👤 Profile</a>
           <a href="#" data-link="settings">⚙️ Settings</a>
           <a href="#" data-link="goals">🏆 Goals</a>
@@ -249,72 +251,3 @@
     </div>
   </body>
 </html>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Management</title>
-    <link rel="stylesheet" href="style.css">
-    <link
-    href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css"
-    rel="stylesheet"
-/>
-</head>
-
-<body>
-    <!-- шапка профиля -->
-    <header>
-        <nav class="navbar">
-            <a href="#" class="nav-logo">
-                <h2 class="logo-text">Финансы</h2>
-            </a>
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#" class="nav-link toggleTheme">Настройки</i></a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">История операции</i></a>
-                </li>
-                <li class="nav-item">
-                    <a href="signup.html" class="nav-link">Регистрация</i></a>
-                </li>
-            </ul>
-        </nav>
-
-        <div class="theme-panel" id="themePanel">
-            <button id="lightTheme">Light</button>
-            <button id="darkTheme">Dark</button>
-        </div>
-
-    </header>
-
-
-    <section class="score-section">
-        <div class="section-content">
-            <h2 class="score">Доступно: <span id="balance">0</span></h2>
-            <!-- <button class="change" id="changebtn">Изменить счет</button> -->
-        </div>
-
-        <div class="form-wrapper" >
-            <div class="form-container">
-                <label>Тип операции</label>
-            <select id="type">
-                <option value="income">Доход</option>
-                <option value="expense">Расход</option>
-
-            </select><br>
-            <label>Сумма</label>
-            <input type="number" id="amount" placeholder="Введите сумму: "><br>
-            <button class="submit-btn" id="submitBtn">Применить</button>
-            </div>
-        </div>
-    </section>
-    
-    <script src="main.js"></script>
-</body>
-
-</html>
-
