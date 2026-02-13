@@ -9,31 +9,33 @@ export function initNavigation() {
 
       const page = link.dataset.link;
 
-      // активная кнопка
+      // 1️⃣ активная кнопка
       menuLinks.forEach((l) => l.classList.remove("active"));
       link.classList.add("active");
 
-      // если add — открываем модалку
+      // 2️⃣ если add — открываем модалку
       if (page === "add") {
         formWrapper.classList.add("active");
         return;
       }
 
-      // переключаем страницы
+      // 3️⃣ скрываем ВСЕ страницы
       pages.forEach((p) => {
         p.classList.remove("active");
         p.classList.add("hidden");
-
-        if (p.dataset.page === page) {
-          p.classList.remove("hidden");
-          p.classList.add("active");
-        }
       });
 
-      // ✅ ВАЖНО: вот сюда вставляем событие goals
+      // 4️⃣ показываем нужную страницу
+      const targetPage = document.querySelector(`.page[data-page="${page}"]`);
+
+      if (targetPage) {
+        targetPage.classList.remove("hidden");
+        targetPage.classList.add("active");
+      }
+
+      // 5️⃣ если открыли goals — обновляем цель
       if (page === "goals") {
-        const event = new Event("goalPageOpened");
-        window.dispatchEvent(event);
+        window.dispatchEvent(new Event("goalPageOpened"));
       }
     });
   });

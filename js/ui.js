@@ -47,17 +47,24 @@ function updateBalanceUI(newBalance) {
   lastBalance = newBalance;
 }
 
+let showAll = false;
+
 function renderHistory(filter = "all") {
   const list = document.getElementById("historyList");
   list.innerHTML = "";
 
-  let filtered = transactions;
+  let filtered = [...transactions]; // копия массива
 
   if (filter !== "all") {
-    filtered = transactions.filter((t) => t.type === filter);
+    filtered = filtered.filter((t) => t.type === filter);
   }
 
-  filtered.reverse().forEach((t) => {
+  // сортировка по дате (новые сверху)
+  filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const visible = showAll ? filtered : filtered.slice(0, 5);
+
+  visible.forEach((t) => {
     const li = document.createElement("li");
     li.className = `history-item ${t.type}`;
 
@@ -76,7 +83,13 @@ function renderHistory(filter = "all") {
     list.appendChild(li);
   });
 
-  // статистика справа
+  // кнопка показать всё
+  const toggleBtn = document.getElementById("toggleHistoryBtn");
+  if (toggleBtn) {
+    toggleBtn.style.display = filtered.length > 5 ? "block" : "none";
+  }
+
+  // статистика
   document.getElementById("totalOps").textContent = filtered.length;
   document.getElementById("totalIncomeOps").textContent = filtered.filter(
     (t) => t.type === "income",

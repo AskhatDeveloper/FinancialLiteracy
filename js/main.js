@@ -1,12 +1,5 @@
 import { renderCharts } from "./analytics.js";
 
-// ===== KPI totals =====
-let incomeTotal = 0;
-let expenseTotal = 0;
-
-let lastIncome = 0;
-let lastExpense = 0;
-
 // ===== Elements =====
 const balanceDisplay = document.getElementById("balance");
 const submitBtn = document.getElementById("submitBtn");
@@ -55,13 +48,6 @@ if (darkTheme) {
   });
 }
 
-window.addEventListener("load", () => {
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark-mode");
-  }
-  renderGoal();
-});
-
 // ===== MAIN LOGIC =====
 submitBtn.addEventListener("click", () => {
   const type = document.getElementById("type").value;
@@ -81,40 +67,7 @@ submitBtn.addEventListener("click", () => {
     date: new Date().toISOString(),
   });
   saveTransactions();
-
-  // 2. считаем новые значения
-  const newBalance = calculateBalance();
-  const newIncome = calculateIncome();
-  const newExpense = calculateExpense();
-
-  // 3. проценты
-  updateBalanceUI(newBalance);
-  updatePercent(
-    document.getElementById("incomeChange"),
-    newIncome,
-    incomeTotal,
-  );
-  updatePercent(
-    document.getElementById("expenseChange"),
-    newExpense,
-    expenseTotal,
-  );
-
-  // 4. обновляем totals
-  incomeTotal = newIncome;
-  expenseTotal = newExpense;
-
-  // 5. UI
-  balanceDisplay.textContent = newBalance + " ₽";
-  document.getElementById("income").textContent = newIncome + " ₽";
-  document.getElementById("expense").textContent = newExpense + " ₽";
-
-  renderHistory();
-  renderCategories();
-  renderCharts();
-  renderInsights();
-  renderGoal();
-
+  refreshUI();
   document.getElementById("amount").value = "";
   formWrapper.classList.remove("active");
 });
@@ -142,44 +95,11 @@ document.querySelector(".modal-close").addEventListener("click", () => {
   formWrapper.classList.remove("active");
 });
 
-const saveProfileBtn = document.getElementById("saveProfileBtn");
-
-if (saveProfileBtn) {
-  saveProfileBtn.addEventListener("click", () => {
-    const name = document.getElementById("profileName").value;
-    const mode = document.getElementById("profileMode").value;
-    const income = document.getElementById("profileIncome").value;
-
-    const profile = {
-      name,
-      mode,
-      income,
-    };
-
-    localStorage.setItem("userProfile", JSON.stringify(profile));
-
-    alert("Профиль сохранен");
-  });
-}
-
-window.addEventListener("load", () => {
-  const saved = localStorage.getItem("userProfile");
-
-  if (saved) {
-    const profile = JSON.parse(saved);
-
-    document.getElementById("profileName").value = profile.name || "";
-    document.getElementById("profileMode").value = profile.mode || "fixed";
-    document.getElementById("profileIncome").value = profile.income || "";
-  }
-});
-
 // ===== SETTINGS =====
 
 const darkModeToggle = document.getElementById("darkModeToggle");
 const currencySelect = document.getElementById("currencySelect");
 const clearDataBtn = document.getElementById("clearDataBtn");
-const resetProfileBtn = document.getElementById("resetProfileBtn");
 
 // Тема
 if (darkModeToggle) {
@@ -194,13 +114,19 @@ if (darkModeToggle) {
   });
 }
 
-// Подгрузка темы
 window.addEventListener("load", () => {
   const theme = localStorage.getItem("theme");
   if (theme === "dark") {
     document.body.classList.add("dark-mode");
     if (darkModeToggle) darkModeToggle.checked = true;
   }
+
+  const savedCurrency = localStorage.getItem("currency");
+  if (savedCurrency && currencySelect) {
+    currencySelect.value = savedCurrency;
+  }
+
+  refreshUI();
 });
 
 // Валюта
@@ -209,13 +135,6 @@ if (currencySelect) {
     localStorage.setItem("currency", currencySelect.value);
   });
 }
-
-window.addEventListener("load", () => {
-  const savedCurrency = localStorage.getItem("currency");
-  if (savedCurrency && currencySelect) {
-    currencySelect.value = savedCurrency;
-  }
-});
 
 // Очистка транзакций
 if (clearDataBtn) {
@@ -228,43 +147,17 @@ if (clearDataBtn) {
   });
 }
 
-// Сброс профиля
-if (resetProfileBtn) {
-  resetProfileBtn.addEventListener("click", () => {
-    if (confirm("Удалить профиль?")) {
-      localStorage.removeItem("userProfile");
-      location.reload();
-    }
-  });
-}
-
-window.addEventListener("load", () => {
-  const balance = calculateBalance();
-  const income = calculateIncome();
-  const expense = calculateExpense();
-
-  balanceDisplay.textContent = balance + " ₽";
-  document.getElementById("income").textContent = income + " ₽";
-  document.getElementById("expense").textContent = expense + " ₽";
-
-  renderHistory();
-  renderCategories();
-  renderCharts();
-});
-window.addEventListener("goalPageOpened", () => {
-  renderGoal();
-});
-
 function renderInsights() {
-  const list = document.querySelector(".insights");
+  const container = document.getElementById("insightsContent");
   const tips = generateInsights();
 
-  list.innerHTML = "<h3>Финансовые подсказки</h3>";
+  container.innerHTML = "";
 
   tips.forEach((tip) => {
-    const p = document.createElement("p");
-    p.textContent = tip;
-    list.appendChild(p);
+    const div = document.createElement("div");
+    div.className = "insight-item";
+    div.textContent = tip;
+    container.appendChild(div);
   });
 }
 
@@ -329,14 +222,6 @@ if (historyFilter) {
   });
 }
 
-const editProfileBtn = document.getElementById("editProfileBtn");
-
-if (editProfileBtn) {
-  editProfileBtn.addEventListener("click", () => {
-    alert("Редактирование профиля будет добавлено в следующем обновлении");
-  });
-}
-
 const goalModal = document.getElementById("goalModal");
 const confirmDeleteGoal = document.getElementById("confirmDeleteGoal");
 const cancelDeleteGoal = document.getElementById("cancelDeleteGoal");
@@ -362,4 +247,32 @@ if (mobileBtn) {
   mobileBtn.addEventListener("click", () => {
     sideMenu.classList.toggle("active");
   });
+}
+
+const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
+
+if (toggleHistoryBtn) {
+  toggleHistoryBtn.addEventListener("click", () => {
+    showAll = !showAll;
+    toggleHistoryBtn.textContent = showAll ? "Свернуть" : "Показать всё";
+    renderHistory();
+  });
+}
+
+function refreshUI() {
+  const balance = calculateBalance();
+  const income = calculateIncome();
+  const expense = calculateExpense();
+
+  balanceDisplay.textContent = balance + " ₽";
+  document.getElementById("income").textContent = income + " ₽";
+  document.getElementById("expense").textContent = expense + " ₽";
+
+  updateBalanceUI(balance);
+
+  renderHistory();
+  renderCategories();
+  renderCharts();
+  renderInsights();
+  renderGoal();
 }

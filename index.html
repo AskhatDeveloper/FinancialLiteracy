@@ -12,7 +12,8 @@
   </head>
 
   <body>
-    <div class="app">
+    <div class="app-wrapper">
+<div class="app">
       <aside class="sidebar">
         <button class="mobile-menu-btn">☰</button>
 
@@ -22,9 +23,7 @@
 
         <nav class="side-menu">
           <a href="#" class="active" data-link="dashboard">🏠 Dashboard</a>
-          <a href="#" data-link="analytics">📊 Analytics</a>
           <a href="#" data-link="history">📜 History</a>
-          <a href="#" data-link="profile">👤 Profile</a>
           <a href="#" data-link="settings">⚙️ Settings</a>
           <a href="#" data-link="goals">🏆 Goals</a>
         </nav>
@@ -36,7 +35,8 @@
         </div> -->
 
       <main class="content">
-        <section class="page active" data-page="dashboard">
+        <div class="container">
+<section class="page active" data-page="dashboard">
           <!-- KPI -->
           <section class="kpi-grid section">
             <div class="kpi-card">
@@ -61,149 +61,143 @@
             </div>
           </section>
 
-          <section class="section dashboard-bottom">
+          <!-- БЛОК СТАТИСТИКИ -->
+          <section class="dashboard-middle section">
             <section class="categories">
               <h3>Куда уходят деньги</h3>
               <ul id="categoryList"></ul>
+
+              <button id="toggleCategoriesBtn" class="toggle-btn hidden">
+                Показать всё
+              </button>
             </section>
 
             <section class="insights">
               <h3>Финансовые подсказки</h3>
-              <p class="tip">Добавьте расходы, чтобы увидеть аналитику</p>
+              <div id="insightsContent"></div>
             </section>
+
+            <section class="section dashboard-analytics">
+              <h3>Аналитика</h3>
+
+              <div class="analytics-grid">
+                <div class="analytics-card">
+                  <h4>Доход и расход по месяцам</h4>
+                  <canvas id="incomeExpenseBar"></canvas>
+                </div>
+
+                <div class="analytics-card">
+                  <h4>Расходы по категориям</h4>
+                  <canvas id="pieChart"></canvas>
+                </div>
+              </div>
+            </section>
+
+
+
           </section>
         </section>
 
-        <section class="page hidden" data-page="history">
-          <div class="history-layout">
-            <div class="history-left">
-              <div class="history-header">
-                <h3>История операций</h3>
 
-                <select id="historyFilter">
-                  <option value="all">Все</option>
-                  <option value="income">Доход</option>
-                  <option value="expense">Расход</option>
-                </select>
+           <section class="page hidden" data-page="history">
+            <div class="history-layout">
+              <div class="history-left">
+                <div class="history-header">
+                  <h3>История операций</h3>
+
+                  <select id="historyFilter">
+                    <option value="all">Все</option>
+                    <option value="income">Доход</option>
+                    <option value="expense">Расход</option>
+                  </select>
+                </div>
+
+                <ul id="historyList"></ul>
               </div>
 
-              <ul id="historyList"></ul>
-            </div>
-
-            <div class="history-right">
-              <div class="history-summary-card">
-                <h4>Статистика</h4>
-                <p>Всего операций: <span id="totalOps"></span></p>
-                <p>Доходов: <span id="totalIncomeOps"></span></p>
-                <p>Расходов: <span id="totalExpenseOps"></span></p>
+              <div class="history-right">
+                <div class="history-summary-card">
+                  <h4>Статистика</h4>
+                  <p>Всего операций: <span id="totalOps"></span></p>
+                  <p>Доходов: <span id="totalIncomeOps"></span></p>
+                  <p>Расходов: <span id="totalExpenseOps"></span></p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section class="page hidden" data-page="analytics">
-          <h3>Аналитика</h3>
+          <section class="page hidden" data-page="settings">
+            <h3>Настройки</h3>
 
-          <div class="analytics-grid">
-            <div class="analytics-card">
-              <h4>Доход и расход по месяцам</h4>
-              <canvas id="incomeExpenseBar"></canvas>
+            <div class="settings-card">
+              <label>
+                <input type="checkbox" id="darkModeToggle" />
+                Темная тема
+              </label>
             </div>
 
-            <div class="analytics-card">
-              <h4>Расходы по категориям</h4>
-              <canvas id="pieChart"></canvas>
-            </div>
-          </div>
-        </section>
-
-        <section class="page hidden" data-page="settings">
-          <h3>Настройки</h3>
-
-          <div class="settings-card">
-            <label>
-              <input type="checkbox" id="darkModeToggle" />
-              Темная тема
-            </label>
-          </div>
-
-          <div class="settings-card">
-            <label>Валюта</label>
-            <select id="currencySelect">
-              <option value="₽">₽ Рубль</option>
-              <option value="$">$ Доллар</option>
-              <option value="₸">₸ Тенге</option>
-            </select>
-          </div>
-
-          <div class="settings-card">
-            <button id="clearDataBtn" class="danger-btn">
-              Очистить все транзакции
-            </button>
-          </div>
-
-          <div class="settings-card">
-            <button id="resetProfileBtn">Сбросить профиль</button>
-          </div>
-        </section>
-
-        <section class="page hidden" data-page="profile">
-          <h3>Профиль</h3>
-
-          <div class="profile-card">
-            <div class="profile-header">
-              <div class="avatar">A</div>
-              <h4 id="profileDisplayName">Асхат</h4>
+            <div class="settings-card">
+              <label>Валюта</label>
+              <select id="currencySelect">
+                <option value="₽">₽ Рубль</option>
+                <option value="$">$ Доллар</option>
+                <option value="₸">₸ Тенге</option>
+              </select>
             </div>
 
-            <div class="profile-info">
-              <p>Тип дохода: <span id="profileType"></span></p>
-              <p>Средний доход: <span id="profileAvg"></span></p>
-            </div>
-
-            <button id="editProfileBtn">Редактировать</button>
-          </div>
-        </section>
-
-        <section class="page hidden" data-page="goals">
-          <div class="goal-card">
-            <h3>Финансовая цель</h3>
-
-            <div id="goalEmpty">
-              <div class="goal-form">
-                <input
-                  type="text"
-                  id="goalInputTitle"
-                  placeholder="Название цели"
-                />
-                <input
-                  type="number"
-                  id="goalInputAmount"
-                  placeholder="Сумма цели"
-                />
-                <button id="createGoalBtn">Создать цель</button>
-              </div>
-            </div>
-
-            <div id="goalContent" class="hidden">
-              <h4 id="goalTitle"></h4>
-              <p>
-                <span id="goalCurrent"></span> /
-                <span id="goalTarget"></span>
-              </p>
-
-              <p id="goalPercent"></p>
-
-              <div class="goal-progress">
-                <div class="goal-bar" id="goalBar"></div>
-              </div>
-
-              <button id="clearGoalBtn" class="goal-delete-btn">
-                🗑 Удалить цель
+            <div class="settings-card">
+              <button id="clearDataBtn" class="danger-btn">
+                Очистить все транзакции
               </button>
             </div>
-          </div>
+
+            <div class="settings-card">
+              <button id="resetProfileBtn">Сбросить профиль</button>
+            </div>
+          </section>
+
+          <section class="page hidden" data-page="goals">
+            <div class="goal-card">
+              <h3>Финансовая цель</h3>
+
+              <div id="goalEmpty">
+                <div class="goal-form">
+                  <input
+                    type="text"
+                    id="goalInputTitle"
+                    placeholder="Название цели"
+                  />
+                  <input
+                    type="number"
+                    id="goalInputAmount"
+                    placeholder="Сумма цели"
+                  />
+                  <button id="createGoalBtn">Создать цель</button>
+                </div>
+              </div>
+
+              <div id="goalContent" class="hidden">
+                <h4 id="goalTitle"></h4>
+                <p>
+                  <span id="goalCurrent"></span> /
+                  <span id="goalTarget"></span>
+                </p>
+
+                <p id="goalPercent"></p>
+
+                <div class="goal-progress">
+                  <div class="goal-bar" id="goalBar"></div>
+                </div>
+
+                <button id="clearGoalBtn" class="goal-delete-btn">
+                  🗑 Удалить цель
+                </button>
+              </div>
+            </div>
+          </section>
         </section>
+        </div>
+        
       </main>
 
       <!-- КНОПКА -->
@@ -248,6 +242,7 @@
           <button id="cancelDeleteGoal" class="secondary-btn">Отмена</button>
         </div>
       </div>
+    </div>
     </div>
   </body>
 </html>

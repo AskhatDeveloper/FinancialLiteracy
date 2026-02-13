@@ -4,6 +4,7 @@ let incomeChart;
 let expenseChart;
 let barChart;
 let pieChart;
+let showAllCategories = false;
 
 const categories = {
   food: "Еда",
@@ -32,22 +33,30 @@ function calculateCategoryStats() {
     percent: Math.round((value / total) * 100),
   }));
 }
+
 function renderCategories() {
   const list = document.getElementById("categoryList");
+  const toggleBtn = document.getElementById("toggleCategoriesBtn");
+
   list.innerHTML = "";
 
   const stats = calculateCategoryStats();
 
   if (stats.length === 0) {
     list.innerHTML = `
-    <li class="category-empty">
-      Добавьте расход, чтобы увидеть анализ категорий
-    </li>
-  `;
+      <li class="category-empty">
+        Добавьте расход, чтобы увидеть анализ категорий
+      </li>
+    `;
+    toggleBtn.classList.add("hidden");
     return;
   }
 
-  stats.forEach((c) => {
+  const LIMIT = 4;
+
+  const visibleStats = showAllCategories ? stats : stats.slice(0, LIMIT);
+
+  visibleStats.forEach((c) => {
     const li = document.createElement("li");
     li.className = "category-item";
 
@@ -56,17 +65,28 @@ function renderCategories() {
       <span class="category-percent">${c.percent}%</span>
     `;
 
-    // 🔥 ВОТ СЮДА
-    if (c.percent > 40) {
-      li.style.fontWeight = "600";
-    }
-    if (c.percent > 40) {
-      li.style.color = "var(--danger)";
-    }
-
     list.appendChild(li);
   });
+
+  if (stats.length > LIMIT) {
+    toggleBtn.classList.remove("hidden");
+    toggleBtn.textContent = showAllCategories ? "Скрыть" : "Показать всё";
+  } else {
+    toggleBtn.classList.add("hidden");
+  }
 }
+
+document
+  .getElementById("toggleCategoriesBtn")
+  ?.addEventListener("click", () => {
+    showAllCategories = !showAllCategories;
+    renderCategories();
+  });
+
+document.getElementById("toggleCategories")?.addEventListener("click", () => {
+  showAllCategories = !showAllCategories;
+  renderCategories();
+});
 
 export function generateInsights() {
   const incomes = transactions.filter((t) => t.type === "income");
@@ -147,8 +167,26 @@ function renderPieChart() {
       datasets: [
         {
           data: Object.values(categoryTotals),
+          borderWidth: 2,
         },
       ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: 10,
+      },
+      plugins: {
+        legend: {
+          position: "right",
+          labels: {
+            padding: 15,
+            boxWidth: 12,
+            usePointStyle: true,
+          },
+        },
+      },
     },
   });
 }
@@ -180,6 +218,29 @@ function renderBarChart() {
           data: months.map((m) => expenseData[m] || 0),
         },
       ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      borderRadius: 8,
+      plugins: {
+        legend: {
+          position: "top",
+          labels: {
+            font: { size: 13, weight: "500" },
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+        },
+        y: {
+          grid: {
+            color: "rgba(148,163,184,0.1)",
+          },
+        },
+      },
     },
   });
 }
