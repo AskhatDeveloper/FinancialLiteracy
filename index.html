@@ -12,237 +12,88 @@
   </head>
 
   <body>
-    <div class="app-wrapper">
-<div class="app">
-      <aside class="sidebar">
-        <button class="mobile-menu-btn">☰</button>
+    <main class="layout">
+      <section class="hero-card">
+        <h2>Деньги есть, а в конце месяца пусто?</h2>
+        <p>Мы покажем, куда они исчезают и на сколько дней их хватит.</p>
+      </section>
+      <div class="container">
+        <!-- KPI -->
+        <section class="kpi-grid section">
+          <div class="kpi-card">
+            <span class="kpi-title">Баланс</span>
+            <h2 id="balance">0 ₽</h2>
+            <span class="kpi-subtitle">изменение к прошлой операции</span>
+            <span id="balanceChange" class="kpi-change">0%</span>
+          </div>
 
-        <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Обзор ваших финансов</p>
-        <h2 class="logo">Financial Literacy</h2>
+          <div class="kpi-card">
+            <span class="kpi-title">Доход</span>
+            <h2 id="income">0 ₽</h2>
+            <span class="kpi-subtitle">рост доходов</span>
+            <span id="incomeChange" class="kpi-change">0%</span>
+          </div>
 
-        <nav class="side-menu">
-          <a href="#" class="active" data-link="dashboard">🏠 Dashboard</a>
-          <a href="#" data-link="history">📜 History</a>
-          <a href="#" data-link="settings">⚙️ Settings</a>
-          <a href="#" data-link="goals">🏆 Goals</a>
-        </nav>
-      </aside>
-
-      <!-- <div class="theme-panel" id="themePanel">
-          <button id="lightTheme">Light</button>
-          <button id="darkTheme">Dark</button>
-        </div> -->
-
-      <main class="content">
-        <div class="container">
-<section class="page active" data-page="dashboard">
-          <!-- KPI -->
-          <section class="kpi-grid section">
-            <div class="kpi-card">
-              <span class="kpi-title">Баланс</span>
-              <h2 id="balance">0 ₽</h2>
-              <span class="kpi-subtitle">изменение к прошлой операции</span>
-              <span id="balanceChange" class="kpi-change">0%</span>
-            </div>
-
-            <div class="kpi-card">
-              <span class="kpi-title">Доход</span>
-              <h2 id="income">0 ₽</h2>
-              <span class="kpi-subtitle">рост доходов</span>
-              <span id="incomeChange" class="kpi-change">0%</span>
-            </div>
-
-            <div class="kpi-card">
-              <span class="kpi-title">Расход</span>
-              <h2 id="expense">0 ₽</h2>
-              <span class="kpi-subtitle">изменение расходов</span>
-              <span id="expenseChange" class="kpi-change">0%</span>
-            </div>
-          </section>
-
-          <!-- БЛОК СТАТИСТИКИ -->
-          <section class="dashboard-middle section">
-            <section class="categories">
-              <h3>Куда уходят деньги</h3>
-              <ul id="categoryList"></ul>
-
-              <button id="toggleCategoriesBtn" class="toggle-btn hidden">
-                Показать всё
-              </button>
-            </section>
-
-            <section class="insights">
-              <h3>Финансовые подсказки</h3>
-              <div id="insightsContent"></div>
-            </section>
-
-            <section class="section dashboard-analytics">
-              <h3>Аналитика</h3>
-
-              <div class="analytics-grid">
-                <div class="analytics-card">
-                  <h4>Доход и расход по месяцам</h4>
-                  <canvas id="incomeExpenseBar"></canvas>
-                </div>
-
-                <div class="analytics-card">
-                  <h4>Расходы по категориям</h4>
-                  <canvas id="pieChart"></canvas>
-                </div>
-              </div>
-            </section>
-
-
-
-          </section>
+          <div class="kpi-card">
+            <span class="kpi-title">Расход</span>
+            <h2 id="expense">0 ₽</h2>
+            <span class="kpi-subtitle">изменение расходов</span>
+            <span id="expenseChange" class="kpi-change">0%</span>
+          </div>
         </section>
 
-
-           <section class="page hidden" data-page="history">
-            <div class="history-layout">
-              <div class="history-left">
-                <div class="history-header">
-                  <h3>История операций</h3>
-
-                  <select id="historyFilter">
-                    <option value="all">Все</option>
-                    <option value="income">Доход</option>
-                    <option value="expense">Расход</option>
-                  </select>
-                </div>
-
-                <ul id="historyList"></ul>
-              </div>
-
-              <div class="history-right">
-                <div class="history-summary-card">
-                  <h4>Статистика</h4>
-                  <p>Всего операций: <span id="totalOps"></span></p>
-                  <p>Доходов: <span id="totalIncomeOps"></span></p>
-                  <p>Расходов: <span id="totalExpenseOps"></span></p>
-                </div>
-              </div>
-            </div>
+        <!-- БЛОК СТАТИСТИКИ -->
+        <section class="dashboard-middle section">
+          <section class="leak-card">
+            <h3>Главная утечка</h3>
+            <p id="mainLeakText">Нет данных</p>
           </section>
-
-          <section class="page hidden" data-page="settings">
-            <h3>Настройки</h3>
-
-            <div class="settings-card">
-              <label>
-                <input type="checkbox" id="darkModeToggle" />
-                Темная тема
-              </label>
-            </div>
-
-            <div class="settings-card">
-              <label>Валюта</label>
-              <select id="currencySelect">
-                <option value="₽">₽ Рубль</option>
-                <option value="$">$ Доллар</option>
-                <option value="₸">₸ Тенге</option>
-              </select>
-            </div>
-
-            <div class="settings-card">
-              <button id="clearDataBtn" class="danger-btn">
-                Очистить все транзакции
-              </button>
-            </div>
-
-            <div class="settings-card">
-              <button id="resetProfileBtn">Сбросить профиль</button>
-            </div>
+          <section class="runway-card">
+            <h3>Дней до нуля</h3>
+            <p id="runwayText">Нет данных</p>
           </section>
+          <section class="categories">
+            <h3>Куда уходят деньги</h3>
+            <ul id="categoryList"></ul>
 
-          <section class="page hidden" data-page="goals">
-            <div class="goal-card">
-              <h3>Финансовая цель</h3>
-
-              <div id="goalEmpty">
-                <div class="goal-form">
-                  <input
-                    type="text"
-                    id="goalInputTitle"
-                    placeholder="Название цели"
-                  />
-                  <input
-                    type="number"
-                    id="goalInputAmount"
-                    placeholder="Сумма цели"
-                  />
-                  <button id="createGoalBtn">Создать цель</button>
-                </div>
-              </div>
-
-              <div id="goalContent" class="hidden">
-                <h4 id="goalTitle"></h4>
-                <p>
-                  <span id="goalCurrent"></span> /
-                  <span id="goalTarget"></span>
-                </p>
-
-                <p id="goalPercent"></p>
-
-                <div class="goal-progress">
-                  <div class="goal-bar" id="goalBar"></div>
-                </div>
-
-                <button id="clearGoalBtn" class="goal-delete-btn">
-                  🗑 Удалить цель
-                </button>
-              </div>
-            </div>
+            <button id="toggleCategoriesBtn" class="toggle-btn hidden">
+              Показать всё
+            </button>
           </section>
         </section>
-        </div>
-        
-      </main>
-
-      <!-- КНОПКА -->
-      <button class="add-btn">+</button>
-
-      <!-- ФОРМА -->
-      <div class="form-wrapper">
-        <div class="form-container">
-          <button class="modal-close">×</button>
-          <label>Тип операции</label>
-          <select id="type">
-            <option value="income">Доход</option>
-            <option value="expense">Расход</option>
-          </select>
-
-          <label>Категория</label>
-          <select id="category">
-            <option value="food">Еда</option>
-            <option value="transport">Транспорт</option>
-            <option value="subscriptions">Подписки</option>
-            <option value="shopping">Покупки</option>
-            <option value="fun">Развлечения</option>
-            <option value="health">Здоровье</option>
-            <option value="other">Другое</option>
-          </select>
-
-          <label>Сумма</label>
-          <input type="number" id="amount" placeholder="Введите сумму" />
-
-          <button class="submit-btn" id="submitBtn">Добавить</button>
-        </div>
       </div>
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script type="module" src="js/main.js"></script>
-    </div>
-    <div id="goalModal" class="goal-modal hidden">
-      <div class="goal-modal-content">
-        <h4>Удалить цель?</h4>
-        <p>Это действие нельзя отменить</p>
-        <div class="goal-modal-buttons">
-          <button id="confirmDeleteGoal" class="danger-btn">Удалить</button>
-          <button id="cancelDeleteGoal" class="secondary-btn">Отмена</button>
+    </main>
+
+    <!-- КНОПКА -->
+    <button class="add-btn">+</button>
+
+    <!-- ФОРМА -->
+    <div class="form-wrapper">
+      <div class="bottom-sheet">
+        <div class="quick-type">
+          <button class="type-btn active" data-type="expense">Расход</button>
+          <button class="type-btn" data-type="income">Доход</button>
+        </div>
+
+        <input type="number" id="amount" class="quick-amount" placeholder="0" />
+
+        <div class="quick-categories">
+          <button data-category="food">🍔 Еда</button>
+          <button data-category="transport">🚗 Транспорт</button>
+          <button data-category="shopping">🛍 Покупки</button>
+          <button data-category="fun">🎮 Развлечения</button>
+          <button data-category="health">💊 Здоровье</button>
+          <button data-category="other">📦 Другое</button>
+        </div>
+
+        <div class="quick-amounts">
+          <button data-value="100">+100</button>
+          <button data-value="500">+500</button>
+          <button data-value="1000">+1000</button>
         </div>
       </div>
     </div>
-    </div>
+
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
