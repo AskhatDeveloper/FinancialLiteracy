@@ -9,9 +9,13 @@ function loadTransactions() {
 }
 
 function calculateBalance() {
-  return transactions.reduce((sum, t) => {
+  const base = Number(localStorage.getItem("initialBalance")) || 0;
+
+  const transactionsSum = transactions.reduce((sum, t) => {
     return t.type === "income" ? sum + t.amount : sum - t.amount;
   }, 0);
+
+  return base + transactionsSum;
 }
 
 function calculateIncome() {
@@ -24,11 +28,6 @@ function calculateExpense() {
   return transactions
     .filter((t) => t.type === "expense")
     .reduce((sum, t) => sum + t.amount, 0);
-}
-
-function addTransaction(transaction) {
-  transactions.push(transaction);
-  saveTransactions();
 }
 
 function saveTransactions() {

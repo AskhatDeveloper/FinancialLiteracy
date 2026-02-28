@@ -17,6 +17,12 @@
         <h2>Деньги есть, а в конце месяца пусто?</h2>
         <p>Мы покажем, куда они исчезают и на сколько дней их хватит.</p>
       </section>
+      <button class="reset-btn" id="resetApp">Сбросить всё</button>
+      <select id="currencySelect" class="currency-select">
+        <option value="₽">₽ Рубль</option>
+        <option value="$">$ Доллар</option>
+        <option value="₸">₸ Тенге</option>
+      </select>
       <div class="container">
         <!-- KPI -->
         <section class="kpi-grid section">
@@ -60,6 +66,18 @@
               Показать всё
             </button>
           </section>
+          <section class="history">
+            <h3>История операций</h3>
+            <ul id="transactionList"></ul>
+            <div class="history-filter">
+              <button class="filter-btn active" data-filter="all">Все</button>
+              <button class="filter-btn" data-filter="income">Доход</button>
+              <button class="filter-btn" data-filter="expense">Расход</button>
+            </div>
+            <button id="toggleHistoryBtn" class="toggle-btn hidden">
+              Показать всё
+            </button>
+          </section>
         </section>
       </div>
     </main>
@@ -77,14 +95,15 @@
 
         <input type="number" id="amount" class="quick-amount" placeholder="0" />
 
-        <div class="quick-categories">
+        <!-- <div class="quick-categories">
           <button data-category="food">🍔 Еда</button>
           <button data-category="transport">🚗 Транспорт</button>
           <button data-category="shopping">🛍 Покупки</button>
           <button data-category="fun">🎮 Развлечения</button>
           <button data-category="health">💊 Здоровье</button>
           <button data-category="other">📦 Другое</button>
-        </div>
+        </div> -->
+        <div class="quick-categories" id="quickCategories"></div>
 
         <div class="quick-amounts">
           <button data-value="100">+100</button>
@@ -95,5 +114,30 @@
     </div>
 
     <script type="module" src="js/main.js"></script>
+
+    <div class="init-balance-modal" id="initBalanceModal">
+      <div class="init-balance-card">
+        <h3>Сколько у вас сейчас денег?</h3>
+        <input
+          type="number"
+          id="initBalanceInput"
+          placeholder="Введите сумму"
+        />
+        <button id="saveInitBalance">Начать</button>
+      </div>
+    </div>
+    <div class="reset-modal" id="resetModal">
+      <div class="reset-card">
+        <p>Удалить все данные?</p>
+        <div class="reset-actions">
+          <button id="cancelReset">Отмена</button>
+          <button id="confirmReset">Удалить</button>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="toast">
+      <span id="toastText">Операция добавлена</span>
+      <button id="undoBtn">Отменить</button>
+    </div>
   </body>
 </html>

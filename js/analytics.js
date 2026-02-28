@@ -11,6 +11,14 @@ const categories = {
   other: "Другое",
 };
 
+const incomeCategories = {
+  salary: "💼 Зарплата",
+  freelance: "💻 Фриланс",
+  gift: "🎁 Подарок",
+  sale: "💰 Продажа",
+  other_income: "➕ Другое",
+};
+
 function calculateCategoryStats() {
   const expenses = transactions.filter((t) => t.type === "expense");
   const total = expenses.reduce((s, t) => s + t.amount, 0);
@@ -24,7 +32,7 @@ function calculateCategoryStats() {
   });
 
   return Object.entries(stats).map(([key, value]) => ({
-    name: categories[key],
+    name: categories[key] || "Другое",
     percent: Math.round((value / total) * 100),
   }));
 }
@@ -77,11 +85,6 @@ document
     showAllCategories = !showAllCategories;
     renderCategories();
   });
-
-document.getElementById("toggleCategories")?.addEventListener("click", () => {
-  showAllCategories = !showAllCategories;
-  renderCategories();
-});
 
 export function getMainLeak() {
   const stats = calculateCategoryStats();
